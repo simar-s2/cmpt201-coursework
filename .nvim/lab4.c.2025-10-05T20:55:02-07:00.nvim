@@ -1,0 +1,14 @@
+#include <stdio.h>
+#include <unistd.h>
+
+int main(void) {
+  void *initialbrk = sbrk(0);
+  printf("Initial program break:%p\n", initialbrk);
+  int bytes_to_add = 256;
+
+  void *new_memory_size = sbrk(256);
+  if (new_memory_size == (void *){
+      perror("sbrk failed");
+      return 1;
+      }
+}

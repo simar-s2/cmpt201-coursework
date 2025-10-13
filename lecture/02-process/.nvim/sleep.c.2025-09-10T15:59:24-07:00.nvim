@@ -1,0 +1,12 @@
+#include <stdio.h>
+#include <unistd.h>
+
+int main() {
+  int myNumber;
+  printf("How many seconds do you want to run sleep for: ");
+  scanf("%d", &myNumber);
+  for (int i = 0; i < myNumber; i++) {
+    printf("sleep %d\n", i + 1);
+    sleep(1);
+  }
+}

@@ -18,23 +18,23 @@ void initialize_block(struct header *block, uint64_t size, struct header *next,
 int find_first_fit(struct header *free_list_ptr, uint64_t size) {
   // go through list and find first one that works
   struct header *current = free_list_ptr;
-
+  
   while (current != NULL) {
     if (current->size >= size) {
       return current->id;
     }
     current = current->next;
   }
-
+  
   return -1;
 }
 
 int find_best_fit(struct header *free_list_ptr, uint64_t size) {
   int best_fit_id = -1;
   uint64_t smallest_size = UINT64_MAX;
-
+  
   struct header *current = free_list_ptr;
-
+  
   // go through whole list and find smallest block that fits
   while (current != NULL) {
     if (current->size >= size) {
@@ -45,16 +45,16 @@ int find_best_fit(struct header *free_list_ptr, uint64_t size) {
     }
     current = current->next;
   }
-
+  
   return best_fit_id;
 }
 
 int find_worst_fit(struct header *free_list_ptr, uint64_t size) {
   int worst_fit_id = -1;
   uint64_t biggest_size = 0;
-
+  
   struct header *current = free_list_ptr;
-
+  
   // find the biggest block that can fit the size
   while (current != NULL) {
     if (current->size >= size && current->size > biggest_size) {
@@ -63,17 +63,17 @@ int find_worst_fit(struct header *free_list_ptr, uint64_t size) {
     }
     current = current->next;
   }
-
+  
   return worst_fit_id;
 }
 
 int main(void) {
 
-  struct header *free_block1 = (struct header *)malloc(sizeof(struct header));
-  struct header *free_block2 = (struct header *)malloc(sizeof(struct header));
-  struct header *free_block3 = (struct header *)malloc(sizeof(struct header));
-  struct header *free_block4 = (struct header *)malloc(sizeof(struct header));
-  struct header *free_block5 = (struct header *)malloc(sizeof(struct header));
+  struct header *free_block1 = (struct header*) malloc(sizeof(struct header));
+  struct header *free_block2 = (struct header*) malloc(sizeof(struct header));
+  struct header *free_block3 = (struct header*) malloc(sizeof(struct header));
+  struct header *free_block4 = (struct header*) malloc(sizeof(struct header));
+  struct header *free_block5 = (struct header*) malloc(sizeof(struct header));
 
   initialize_block(free_block1, 6, free_block2, 1);
   initialize_block(free_block2, 12, free_block3, 2);
@@ -102,37 +102,34 @@ int main(void) {
 
 /*
  * Part 2: Coalescing algorithm
- *
- * So basically when you free a block, you need to check if the blocks next to
- * it are also free, and if they are you merge them together into one big block.
+ * 
+ * So basically when you free a block, you need to check if the blocks next to it
+ * are also free, and if they are you merge them together into one big block.
  * This helps reduce fragmentation.
- *
+ * 
  * Algorithm steps:
- *
- * 1. When a block gets freed (lets call it block Z), first add it to the free
- * list
- *    - Need to keep the free list sorted by memory address so adjacent blocks
- * are next to each other
+ * 
+ * 1. When a block gets freed (lets call it block Z), first add it to the free list
+ *    - Need to keep the free list sorted by memory address so adjacent blocks are next to each other
  *    - Loop through free list to find where Z should go based on its address
- *
+ * 
  * 2. Check if we can merge with the next block
  *    - Calculate where block Z ends: end_addr = Z's address + Z's size
- *    - If theres a next block and end_addr equals the next blocks address,
- * they're touching
+ *    - If theres a next block and end_addr equals the next blocks address, they're touching
  *    - Merge them: Z.size = Z.size + next_block.size
  *    - Update the linked list pointer: Z.next = next_block.next
  *    - Remove next_block from list
- *
+ * 
  * 3. Check if we can merge with previous block
  *    - Find the block before Z in the list (call it prev)
- *    - Calculate where prev ends: prev_end = prev's address + prev's size
+ *    - Calculate where prev ends: prev_end = prev's address + prev's size  
  *    - If prev_end equals Z's address, they're contiguous
  *    - Merge: prev.size = prev.size + Z.size
  *    - Update pointer: prev.next = Z.next
  *    - Remove Z from the list
- *
+ * 
  * 4. Done, free list now has bigger blocks
- *
+ * 
  * Example from the diagram:
  * Initially have free blocks A and B, with allocated block Z between them
  * When Z gets freed:
@@ -140,7 +137,7 @@ int main(void) {
  * - Check A and Z: if A's end address = Z's start address, merge them
  * - Check the merged block and B: if merged end = B's start, merge again
  * - End up with one big free block instead of 3 small ones
- *
+ * 
  * The key thing is keeping blocks sorted by address so you can easily check
  * if blocks are next to each other in memory. Then just combine their sizes
  * and update the pointers.

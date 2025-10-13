@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define HISTORY_SIZE 5
+
+int main(void) {
+  char *history[HISTORY_SIZE] = {NULL};
+  int index = 0;
+  char *line = NULL;
+  size_t len = 0;
+
+  while (1) {
+    printf("Enter input: ");
+    ssize_t nread = getline(&line, &len, stdin);
+    if (nread == -1) {
+      printf("\nTerminated\n");
+      break;
+    }
+
+    if (nread > 0 && line[nread - 1] == '\n') {
+      line[nread - 1] = '\0';
+    }
+
+    if (history[index] != NULL) {
+      free history[index];
+    }
+
+    history[index] = strdup(line);
+    if (history[index] == NULL) {
+      perror("strdup");
+      exit(EXIT_FAILURE);
+    }
+
+    if (strcmp(line, "print") == 0) {
+      int count = 0;
+      for (int i = 0; i < HISTORY_SIZE; i++) {
+        if (history[i] != NULL)
+          count++;
+      }
+
+      int start = (index + 1) % HISTORY_SIZE;
+      for (int i = 0; i < count; i++) {
+        int pos = (start + i) % HISTORY_SIZE;
+        printf("%s\n", history[pos]);
+      }
+
+      index = (index + 1) % HISTORY_SIZE;
+    }
+  }
+
+  free(line);
+  for (int i = 0; i < HISTORY_SIZE; i++) {
+    free(history[i]);
+  }
+  return 0;
+}

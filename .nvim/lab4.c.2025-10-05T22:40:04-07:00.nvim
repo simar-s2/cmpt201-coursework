@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+
+int main(void) {
+  void *initialbrk = sbrk(0);
+  printf("Initial program break:%p\n", initialbrk);
+  int bytes_to_add = 256;
+
+  void *new_memory_size = sbrk(bytes_to_add);
+  if (new_memory_size == (void *)-1) {
+    perror("sbrk failed");
+    return 1;
+  }
+  printf("New program break:%p\n", new_memory_size);
+  printf("Program break after allocation:%p\n", sbrk(0));
+
+  size_t block_size = 128;
+  size_t total_size = 2 * block_size;
+  void *heap = malloc(total_size);
+
+  if (!heap) {
+    perror("malloc failed");
+    return 1;
+  }
+
+  printf("Heap space allocated at:%p\n", heap);
+  struct header *block1 = (struct header *)heap;
+  struct header *block2 = (struct header *)(char *)heap + block_size;
+}

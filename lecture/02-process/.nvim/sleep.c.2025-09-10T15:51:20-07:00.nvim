@@ -1,0 +1,9 @@
+#include <stdio.h>
+#include <unistd.h>
+
+int main() {
+  int myNumber;
+  printf("How many seconds do you want to run sleep for:");
+  scanf("%d", &myNumber);
+  printf("%d", myNumber); 
+}
