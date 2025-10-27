@@ -1,0 +1,22 @@
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define ASSERT(expr)                                                           \
+{                                                                              \
+if (!(expr)) {                                                             \
+fprintf(stderr, "Assertion failed: %s\n", #expr);                        \
+exit(1);                                                                 \
+}                                                                          \
+}
+
+#define TEST(expr)                                                             \
+{                                                                            \
+if (!(expr)) {                                                             \
+fprintf(stderr, "Test failed: %s\n", #expr);                             \
+exit(1);                                                                 \
+} else {                                                                   \
+printf("Test passed: %s\n", #expr);                                      \
+}                                                                          \
+}

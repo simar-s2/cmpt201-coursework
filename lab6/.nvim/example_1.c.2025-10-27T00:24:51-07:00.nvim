@@ -1,0 +1,24 @@
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+failed: %s\n", #expr);                             \
+          exit(1);                                                                 \
+              } else {                                                                   \
+                      printf("Test passed: %s\n", #expr);                                      \
+                            }
+\
+      }#define ASSERT(expr)                                                           \
+  {                                                                            \
+    if (!(expr)) {                                                             \
+      fprintf(stderr, "Assertion failed: %s\n", #expr);                        \
+      exit(1);                                                                 \
+    }                                                                          \
+  }
+
+#define TEST(expr)                                                             \
+  {                                                                            \
+    if (!(expr)) {                                                             \
+      fprintf(stderr, "Test uu[27u[27u[27u[27u[27u[27u[27u[27u[27u[27u[27u[27u[27u[27u[27u:q
+jolknsdgojnb3reogubwouerbgwouebg[99;5u[99;5u[99;5u[99;5u[99;5u::setmostlh

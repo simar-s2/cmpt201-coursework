@@ -1,0 +1,12 @@
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define ASSERT(expr)                                                           \
+{                                                                            \
+    if (!(expr)) {                                                             \
+      fprintf(stderr, "Assertion failed: %s\n", #expr);                        \
+      exit(1);                                                                 \
+    }                                                                          \
+  }
+
